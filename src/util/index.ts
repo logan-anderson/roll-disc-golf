@@ -1,9 +1,9 @@
-import { Option } from "./interfaces";
+import { Option, OptionType } from "./interfaces";
 
-export const rollDice: (dice: Option[][]) => string = (dice) => {
+export const rollDice: (dice: OptionType[]) => string = (dice) => {
   let returnValue = [];
   dice.forEach((die) => {
-    returnValue.push(roll(die));
+    returnValue.push(`${die.label}: ` + roll(die.options) + `\n`);
   });
 
   return returnValue.join(", ");
