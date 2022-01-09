@@ -1,6 +1,8 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
+import { DiscRoller } from "../components/DiscRoller";
+import { Layout } from "../components/Layout";
 import { rollDice } from "../util";
 import { Option } from "../util/interfaces";
 
@@ -67,35 +69,14 @@ export default function Home() {
     },
   ];
 
-  const [display, setDisplay] = useState("No roll");
-
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <div style={{ textAlign: "center" }}>
-        <h1>Disc Dice</h1>
-        <div>{display}</div>
-        <div>
-          <button
-            onClick={() => {
-              setDisplay(
-                rollDice([
-                  { options: throwOptions, label: "Throw Type" },
-                  { options: discOptions, label: "Disc Type" },
-                ])
-              );
-            }}
-          >
-            Roll
-          </button>
-        </div>
-      </div>
-    </div>
+    <Layout>
+      <DiscRoller
+        options={[
+          { options: throwOptions, label: "Throw Type" },
+          { options: discOptions, label: "Disc Type" },
+        ]}
+      />
+    </Layout>
   );
 }
