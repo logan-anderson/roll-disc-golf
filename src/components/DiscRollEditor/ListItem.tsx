@@ -2,14 +2,21 @@ import { ExclamationCircleIcon } from "@heroicons/react/solid";
 import { useState, useRef, SVGProps } from "react";
 import { useOutsideRef } from "../../hooks/useOutsideRef";
 import { Option } from "../../util/interfaces";
+import { useOptions } from "../state";
 
 const errorStyles =
   "border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500";
 const normalStyles =
   "focus:ring-blue-500 focus:border-blue-500 border-gray-300 ";
-export const ListItem: React.FC<{ item: Option }> = ({ item }) => {
+export const ListItem: React.FC<{
+  item: Option;
+  label: string;
+  index: [number, number];
+}> = ({ item, label, index }) => {
   const [edit, setEditMode] = useState(false);
   const [temp, setTemp] = useState(item.label || "");
+  const { setLabel } = useOptions();
+
   const wrapperRef = useRef(null);
   useOutsideRef(wrapperRef, () => {
     setTemp((t) => {
@@ -25,16 +32,17 @@ export const ListItem: React.FC<{ item: Option }> = ({ item }) => {
     <li className="flex justify-between p-3" ref={wrapperRef}>
       <div className="flex flex-row justify-around w-full">
         <div className="flex flex-row justify-start">
-          <div className="my-auto">Shot Type:</div>
+          <div className="my-auto">{label}: </div>
           <p>{!edit && temp}</p>
           {edit && (
             <div>
               <label htmlFor="shot" className="sr-only">
-                Shot
+                {label}
               </label>
               <div className="mt-1 relative rounded-md shadow-sm">
                 <input
                   onChange={(e) => {
+                    setLabel(e.target.value, index);
                     setTemp(e.target.value);
                   }}
                   value={temp}

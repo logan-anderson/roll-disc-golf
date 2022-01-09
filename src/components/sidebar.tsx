@@ -1,68 +1,5 @@
 import { useState } from "react";
 import { DiscRollChooser } from "./DiscRollEditor/DiscRollChooser";
-import type { Option } from "../util/interfaces";
-
-const throwOptions: Option[] = [
-  {
-    label: "Wild",
-    prob: 0.12,
-  },
-  {
-    label: "Backhand",
-    prob: 0.11,
-  },
-  {
-    label: "Forehand",
-    prob: 0.11,
-  },
-  {
-    label: "Roller",
-    prob: 0.11,
-  },
-  {
-    label: "Overhand",
-    prob: 0.11,
-  },
-  {
-    label: "Wild",
-    prob: 0.11,
-  },
-  {
-    label: "Over Stable",
-    prob: 0.11,
-  },
-  {
-    label: "Under Stable",
-    prob: 0.11,
-  },
-  {
-    label: "Neutral",
-    prob: 0.11,
-  },
-];
-
-const discOptions: Option[] = [
-  {
-    label: "Putter",
-    prob: 0.2,
-  },
-  {
-    label: "Midrange",
-    prob: 0.2,
-  },
-  {
-    label: "Fairway Diver",
-    prob: 0.2,
-  },
-  {
-    label: "Distance Diver",
-    prob: 0.2,
-  },
-  {
-    label: "Wild",
-    prob: 0.2,
-  },
-];
 
 export const Sidebar: React.FC = ({ children }) => {
   const [open, setOpen] = useState(false);
@@ -77,12 +14,7 @@ export const Sidebar: React.FC = ({ children }) => {
         <nav className={`w-full flex-1 flex flex-col ${!open && "hidden"}`}>
           <div className="h-16"></div>
           <div>
-            <DiscRollChooser
-              optionTypes={[
-                { options: throwOptions, label: "Throw Type" },
-                { options: discOptions, label: "Disc Type" },
-              ]}
-            />
+            <DiscRollChooser />
           </div>
         </nav>
       </aside>
