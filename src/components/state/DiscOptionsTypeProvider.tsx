@@ -13,12 +13,32 @@ interface OptionsContextType {
   setProb: SetProbFunc;
   setNewOptions: AddNewOptionFunc;
   deleteOption: any;
+  saveOptions: any;
 }
 
 const OptionsContext = createContext(null as OptionsContextType);
 
+// TODO: organize this better
+const LOCALSTORAGEKEY = "options-disc-dice";
+const getDefaultOptions = (): OptionType[] => {
+  if (typeof window === "undefined") {
+    return DefaultOptionTypeValues;
+  }
+  let options: OptionType[] = [];
+  try {
+    // Fails if its invalid json or if nothing is present
+    options = JSON.parse(window.localStorage.getItem(LOCALSTORAGEKEY));
+    if (!options) {
+      throw Error();
+    }
+  } catch (e) {
+    options = DefaultOptionTypeValues;
+  }
+  return options;
+};
+
 export const OptionsContextProvider: FC = ({ children }) => {
-  const [options, setOptions] = useState(DefaultOptionTypeValues);
+  const [options, setOptions] = useState(getDefaultOptions());
   const setLabel = (label: string, index: [number, number]) => {
     setOptions((opts) => {
       const [first, second] = index;
@@ -85,6 +105,13 @@ export const OptionsContextProvider: FC = ({ children }) => {
       return tmp;
     });
   };
+  const saveOptions = () => {
+    // TODO: validate probability of each OptionType
+    setOptions((opts) => {
+      window.localStorage.setItem(LOCALSTORAGEKEY, JSON.stringify(opts));
+      return opts;
+    });
+  };
   return (
     <OptionsContext.Provider
       value={{
@@ -94,6 +121,7 @@ export const OptionsContextProvider: FC = ({ children }) => {
         setProb,
         setNewOptions,
         deleteOption,
+        saveOptions,
       }}
     >
       {children}
