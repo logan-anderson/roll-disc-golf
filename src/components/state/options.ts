@@ -1,4 +1,4 @@
-import { Option } from "../../util/interfaces";
+import { Option, OptionType } from "../../util/interfaces";
 
 const throwOptions: Option[] = [
   {
@@ -62,7 +62,7 @@ const discOptions: Option[] = [
   },
 ];
 
-export const DefaultOptionTypeValues = [
+export const DefaultOptionTypeValues: OptionType[] = [
   { options: throwOptions, label: "Throw Type" },
   { options: discOptions, label: "Disc Type" },
 ];

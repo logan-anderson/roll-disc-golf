@@ -1,4 +1,8 @@
-import { ExclamationCircleIcon } from "@heroicons/react/solid";
+import {
+  ExclamationCircleIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/solid";
 import { useState, useRef, SVGProps } from "react";
 import { useOutsideRef } from "../../hooks/useOutsideRef";
 import { Option } from "../../util/interfaces";
@@ -14,12 +18,13 @@ export const ListItem: React.FC<{
   index: [number, number];
 }> = ({ item, label, index }) => {
   const [edit, setEditMode] = useState(false);
-  const [temp, setTemp] = useState(item.label || "");
-  const { setLabel } = useOptions();
+  const [currentLabel, setCurrentLabel] = useState(item.label);
+  const [currentProb, setCurrentProb] = useState(item.prob || 0);
+  const { setLabel, setProb, deleteOption } = useOptions();
 
   const wrapperRef = useRef(null);
   useOutsideRef(wrapperRef, () => {
-    setTemp((t) => {
+    setCurrentLabel((t) => {
       const error = !t;
       if (!error) {
         setEditMode(false);
@@ -27,13 +32,13 @@ export const ListItem: React.FC<{
       return t;
     });
   });
-  const error = !temp;
+  const error = !currentLabel;
   return (
     <li className="flex justify-between p-3" ref={wrapperRef}>
       <div className="flex flex-row justify-around w-full">
         <div className="flex flex-row justify-start">
           <div className="my-auto">{label}: </div>
-          <p>{!edit && temp}</p>
+          <p>{!edit && currentLabel}</p>
           {edit && (
             <div>
               <label htmlFor="shot" className="sr-only">
@@ -43,9 +48,9 @@ export const ListItem: React.FC<{
                 <input
                   onChange={(e) => {
                     setLabel(e.target.value, index);
-                    setTemp(e.target.value);
+                    setCurrentLabel(e.target.value);
                   }}
-                  value={temp}
+                  value={currentLabel}
                   type="text"
                   name="shot"
                   id="shot"
@@ -74,72 +79,68 @@ export const ListItem: React.FC<{
         </div>
         <div className="flex flex-row justify-start">
           <div className="my-auto">Probability: </div>
-          <p>{!edit && temp}</p>
+          <p>{!edit && currentProb}</p>
           {edit && (
             <div>
-              <label htmlFor="shot" className="sr-only">
-                Shot
+              <label htmlFor="probability" className="sr-only">
+                Probability
               </label>
               <div className="mt-1 relative rounded-md shadow-sm">
                 <input
                   onChange={(e) => {
-                    setTemp(e.target.value);
+                    setProb(Number(e.target.value), index);
+                    setCurrentProb(Number(e.target.value));
                   }}
-                  value={temp}
-                  type="text"
-                  name="shot"
-                  id="shot"
+                  value={currentProb}
+                  step={0.1}
+                  type="number"
+                  name="probability"
+                  id="probability"
                   className={`block w-full pr-10 sm:text-sm rounded-md ${
                     error ? errorStyles : normalStyles
                   }`}
                   aria-invalid={error ? "true" : "false"}
                   // aria-describedby="email-error"
                 />
-                {error && (
+                {/* TODO: add errors back in to probability */}
+                {/* {error && (
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                     <ExclamationCircleIcon
                       className="h-5 w-5 text-red-500"
                       aria-hidden="true"
                     />
                   </div>
-                )}
+                )} */}
               </div>
-              {error && (
+              {/* {error && (
                 <p className="mt-2 text-sm text-red-600" id="email-error">
                   Must provide a disc name
                 </p>
-              )}
+              )} */}
             </div>
           )}
         </div>
       </div>
-      <button
-        onClick={() => {
-          if (!error) {
-            setEditMode((edit) => !edit);
-          }
-        }}
-      >
-        <EditSVG />
-      </button>
+      <div className="flex flex-row">
+        <button
+          className="hover:bg-gray-400 rounded-md"
+          onClick={() => {
+            deleteOption(index);
+          }}
+        >
+          <TrashIcon className="h-5 w-5 text-red-500" />
+        </button>
+        <button
+          className="hover:bg-gray-400 rounded-md"
+          onClick={() => {
+            if (!error) {
+              setEditMode((edit) => !edit);
+            }
+          }}
+        >
+          <PencilIcon className="w-6 h-6 text-blue-600 hover:text-blue-900 " />
+        </button>
+      </div>
     </li>
   );
 };
-
-const EditSVG: React.FC<SVGProps<SVGSVGElement>> = (props) => (
-  <svg
-    {...props}
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-6 h-6 text-blue-600 hover:text-blue-900 "
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-    />
-  </svg>
-);

@@ -12,6 +12,7 @@ interface OptionsContextType {
   setLabel: SetLabelFunc;
   setProb: SetProbFunc;
   setNewOptions: AddNewOptionFunc;
+  deleteOption: any;
 }
 
 const OptionsContext = createContext(null as OptionsContextType);
@@ -21,26 +22,79 @@ export const OptionsContextProvider: FC = ({ children }) => {
   const setLabel = (label: string, index: [number, number]) => {
     setOptions((opts) => {
       const [first, second] = index;
-      options[first].options[second].label = label;
-      return opts;
+      const tmp: OptionType[] = [
+        ...opts.slice(0, first),
+        {
+          label: opts[first].label,
+          options: [
+            ...opts[first].options.slice(0, second),
+            { ...opts[first].options[second], label: label },
+            ...opts[first].options.slice(second + 1),
+          ],
+        },
+        ...opts.slice(first + 1),
+      ];
+      return tmp;
     });
   };
   const setProb = (prob: number, index: [number, number]) => {
     setOptions((opts) => {
       const [first, second] = index;
-      options[first].options[second].prob = prob;
-      return opts;
+      const tmp: OptionType[] = [
+        ...opts.slice(0, first),
+        {
+          ...opts[first],
+          options: [
+            ...opts[first].options.slice(0, second),
+            { ...opts[first].options[second], prob: prob },
+            ...opts[first].options.slice(second + 1),
+          ],
+        },
+        ...opts.slice(first + 1),
+      ];
+      return tmp;
     });
   };
   const setNewOptions = (index: number) => {
     setOptions((opts) => {
-      opts[index].options.push({ label: "", prob: 0 });
-      return opts;
+      const tmp: OptionType[] = [
+        ...opts.slice(0, index),
+        {
+          ...opts[index],
+          options: [...opts[index].options, { label: "New item", prob: 0 }],
+        },
+        ...opts.slice(index + 1),
+      ];
+      return tmp;
+    });
+  };
+  const deleteOption = (index: [number, number]) => {
+    setOptions((opts) => {
+      const [first, second] = index;
+      const tmp: OptionType[] = [
+        ...opts.slice(0, first),
+        {
+          label: opts[first].label,
+          options: [
+            ...opts[first].options.slice(0, second),
+            ...opts[first].options.slice(second + 1),
+          ],
+        },
+        ...opts.slice(first + 1),
+      ];
+      return tmp;
     });
   };
   return (
     <OptionsContext.Provider
-      value={{ options, setOptions, setLabel, setProb, setNewOptions }}
+      value={{
+        options,
+        setOptions,
+        setLabel,
+        setProb,
+        setNewOptions,
+        deleteOption,
+      }}
     >
       {children}
     </OptionsContext.Provider>

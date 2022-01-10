@@ -7,7 +7,6 @@ import { ListItem } from "./ListItem";
 
 export const DiscRollChooser: React.FC = () => {
   const { options } = useOptions();
-  console.log({ options });
   return (
     <>
       {options.map((_, i) => {
