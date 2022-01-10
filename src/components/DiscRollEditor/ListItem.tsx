@@ -35,8 +35,8 @@ export const ListItem: React.FC<{
   const error = !currentLabel;
   return (
     <li className="flex justify-between p-3" ref={wrapperRef}>
-      <div className="flex flex-row justify-around w-full">
-        <div className="flex flex-row justify-start">
+      <div className="flex flex-col lg:flex-row justify-around w-full">
+        <div className="flex flex-row justify-start mb-2">
           <div className="my-auto">{label}: </div>
           <p>{!edit && currentLabel}</p>
           {edit && (

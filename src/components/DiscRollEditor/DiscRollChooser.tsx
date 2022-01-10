@@ -1,7 +1,6 @@
 // list component from https://dev.to/larainfo/tailwind-css-simple-list-group-examples-30p
 
 import { SaveIcon, PlusCircleIcon } from "@heroicons/react/solid";
-import { OptionType } from "../../util/interfaces";
 import { useOptions } from "../state/DiscOptionsTypeProvider";
 import { ListItem } from "./ListItem";
 
@@ -35,7 +34,7 @@ const DiscShotChooser: React.FC<{ index: number }> = ({ index }) => {
   return (
     <div className="my-8">
       <h2 className="text-xl text-white text-center mb-4">{shots.label}</h2>
-      <div className="mx-auto w-2/3 bg-white rounded-lg shadow-lg lg:w-2/5">
+      <div className="mx-auto w-5/6 bg-white rounded-lg shadow-lg lg:w-2/3">
         <ul className="divide-y-2 divide-gray-400">
           {shots.options.map((x, i) => {
             return (
