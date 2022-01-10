@@ -66,3 +66,5 @@ export const DefaultOptionTypeValues: OptionType[] = [
   { options: throwOptions, label: "Throw Type" },
   { options: discOptions, label: "Disc Type" },
 ];
+
+export const LOCALSTORAGEKEY = "options-disc-dice";

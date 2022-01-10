@@ -1,6 +1,6 @@
 import { createContext, FC, useContext, useState } from "react";
 import { OptionType } from "../../util/interfaces";
-import { DefaultOptionTypeValues } from "./options";
+import { DefaultOptionTypeValues, LOCALSTORAGEKEY } from "./options";
 
 export type SetOptionsFunc = any;
 export type SetLabelFunc = any;
@@ -19,7 +19,7 @@ interface OptionsContextType {
 const OptionsContext = createContext(null as OptionsContextType);
 
 // TODO: organize this better
-const LOCALSTORAGEKEY = "options-disc-dice";
+
 const getDefaultOptions = (): OptionType[] => {
   if (typeof window === "undefined") {
     return DefaultOptionTypeValues;

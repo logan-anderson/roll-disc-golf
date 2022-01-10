@@ -1,25 +1,38 @@
 // list component from https://dev.to/larainfo/tailwind-css-simple-list-group-examples-30p
 
-import { SaveIcon, PlusCircleIcon } from "@heroicons/react/solid";
+import { SaveIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/solid";
 import { useOptions } from "../state/DiscOptionsTypeProvider";
+import { DefaultOptionTypeValues, LOCALSTORAGEKEY } from "../state/options";
 import { ListItem } from "./ListItem";
 
 export const DiscRollChooser: React.FC = () => {
-  const { options, saveOptions } = useOptions();
+  const { options, saveOptions, setOptions } = useOptions();
   return (
     <div>
       <div className="m-5 flex flex-row-reverse">
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            saveOptions();
-          }}
-          type="button"
-          className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Save Selection to Device
-          <SaveIcon className="ml-3 -mr-1 h-5 w-5" aria-hidden="true" />
-        </button>
+        <div className="flex flex-col">
+          <button
+            onClick={() => {
+              window.localStorage.removeItem(LOCALSTORAGEKEY);
+              setOptions(DefaultOptionTypeValues);
+            }}
+            type="button"
+            className="m-2 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            Restore default selections
+            <TrashIcon className="ml-3 -mr-1 h-5 w-5" aria-hidden="true" />
+          </button>
+          <button
+            onClick={() => {
+              saveOptions();
+            }}
+            type="button"
+            className="m-2 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Save Selection to Device
+            <SaveIcon className="ml-3 -mr-1 h-5 w-5" aria-hidden="true" />
+          </button>
+        </div>
       </div>
       {options.map((_, i) => {
         return <DiscShotChooser key={i} index={i} />;
