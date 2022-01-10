@@ -79,7 +79,7 @@ export const ListItem: React.FC<{
         </div>
         <div className="flex flex-row justify-start">
           <div className="my-auto">Probability: </div>
-          <p>{!edit && currentProb}</p>
+          <p className="my-auto">{!edit && currentProb}</p>
           {edit && (
             <div>
               <label htmlFor="probability" className="sr-only">
