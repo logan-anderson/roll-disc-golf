@@ -96,6 +96,7 @@ export const ListItem: React.FC<{
                   type="number"
                   name="probability"
                   id="probability"
+                  min="0"
                   className={`block w-full pr-10 sm:text-sm rounded-md ${
                     error ? errorStyles : normalStyles
                   }`}

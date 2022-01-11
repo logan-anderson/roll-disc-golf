@@ -23,3 +23,20 @@ const roll = (options: Option[]) => {
   }
   return picked;
 };
+export const EPS = 0.00001;
+export const validateOption: (opt: OptionType) => string = (opt) => {
+  const sum: number = opt.options.reduce((x, curr) => x + curr.prob, 0);
+
+  if (Math.abs(1 - sum) <= EPS) {
+    return "";
+  }
+
+  if (sum > 0) {
+    return "Can not have a probability greater then 1";
+  }
+  if (sum < 0) {
+    return "Can not have a probability less then 1";
+  }
+
+  return "";
+};

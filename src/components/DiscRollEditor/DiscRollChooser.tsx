@@ -1,6 +1,8 @@
 // list component from https://dev.to/larainfo/tailwind-css-simple-list-group-examples-30p
 
 import { SaveIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/solid";
+import { ExclamationIcon } from "@heroicons/react/outline";
+import { validateOption } from "../../util";
 import { useOptions } from "../state/DiscOptionsTypeProvider";
 import { DefaultOptionTypeValues, LOCALSTORAGEKEY } from "../state/options";
 import { ListItem } from "./ListItem";
@@ -44,10 +46,36 @@ export const DiscRollChooser: React.FC = () => {
 const DiscShotChooser: React.FC<{ index: number }> = ({ index }) => {
   const { setNewOptions, options } = useOptions();
   const shots = options[index];
+  const errorMessage = validateOption(shots);
   return (
     <div className="my-8">
       <h2 className="text-xl text-white text-center mb-4">{shots.label}</h2>
-      <div className="mx-auto w-5/6 bg-white rounded-lg shadow-lg lg:w-2/3">
+      {errorMessage && (
+        <div className="mx-auto w-5/6 lg:w-2/3">
+          <div className="mx-auto inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div className="sm:flex sm:items-start">
+                <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                  <ExclamationIcon
+                    className="h-6 w-6 text-red-500"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    ERROR: {errorMessage}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      <div
+        className={`mx-auto w-5/6 bg-white rounded-lg shadow-lg lg:w-2/3 ${
+          errorMessage && "border-4 border-red-500"
+        }`}
+      >
         <ul className="divide-y-2 divide-gray-400">
           {shots.options.map((x, i) => {
             return (
@@ -63,7 +91,7 @@ const DiscShotChooser: React.FC<{ index: number }> = ({ index }) => {
       </div>
       <div>
         <PlusCircleIcon
-          className="h-7 w-7 mx-auto mt-3 fill-blue-700"
+          className="h-7 w-7 mx-auto mt-3 text-indigo-600 hover:text-indigo-700"
           onClick={(_) => {
             setNewOptions(index);
           }}
